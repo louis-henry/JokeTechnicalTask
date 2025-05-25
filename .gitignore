@@ -1,4 +1,6 @@
 /Joke.Server/appsettings.json
 /Joke.Server/obj/*
+/Joke.Server/bin/*
 /Joke.Client/obj/*
+/Joke.Client/bin/*
 .idea/*
