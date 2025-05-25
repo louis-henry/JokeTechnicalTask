@@ -1,4 +1,5 @@
 using Joke.Server.Components;
+using Joke.Shared.Options;
 using Radzen;
 using Serilog;
 
@@ -37,7 +38,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddRadzenComponents();
 
 // AppSettings as IOptions<T>
-// TODO
+builder.Services.Configure<OpenRouterOptions>(builder.Configuration.GetSection(OpenRouterOptions.PropertyName));
 
 var app = builder.Build();
 

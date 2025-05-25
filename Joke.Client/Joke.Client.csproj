@@ -25,4 +25,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Joke.Shared\Joke.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

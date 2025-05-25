@@ -2,6 +2,7 @@
 using Joke.Client.Interfaces.Services.Menu;
 using Joke.Client.Services.Joke;
 using Joke.Client.Services.Menu;
+using Joke.Shared.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +35,7 @@ builder.Services
     .AddSingleton<IMenuService, MenuService>();
 
 // AppSettings as IOptions<T>
-// TODO
+builder.Services.Configure<OpenRouterOptions>(builder.Configuration.GetSection(OpenRouterOptions.PropertyName));
 
 // Start
 var host = builder.Build();
