@@ -1,0 +1,51 @@
+@using Joke.Server.Interfaces.Services.Joke
+@using Joke.Shared.Types.Connection
+@inject IJokeViewService JokeViewService
+@implements IDisposable
+
+<h2>
+    @Status
+</h2>
+<RadzenProgressBar ProgressBarStyle="@Style" Value="100" ShowValue="false" Mode="@Mode"/>
+
+@code {
+    private string Status { get; set; } = "Awaiting Connection";
+    private ProgressBarStyle Style { get; set; } = ProgressBarStyle.Info;
+    private ProgressBarMode Mode { get; set; } = ProgressBarMode.Indeterminate;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Yield();
+        JokeViewService.ConnectionStatusChanged += Refresh;
+        Refresh();
+    }
+    
+    private async void Refresh()
+    {
+        var status = JokeViewService.GetConnectionStatus();
+        switch (status)
+        {
+            case ConnectionStatus.Connected:
+                Style = ProgressBarStyle.Success;
+                Mode = ProgressBarMode.Determinate;
+                Status = "Connected";
+                break;
+            case ConnectionStatus.Disconnected:
+                Style = ProgressBarStyle.Danger;
+                Mode = ProgressBarMode.Determinate;
+                Status = "Disconnected";
+                break;
+            default:
+                Style = ProgressBarStyle.Info;
+                Mode = ProgressBarMode.Indeterminate;
+                Status = "Awaiting Connection";
+                break;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+    
+    public void Dispose()
+    {
+        JokeViewService.ConnectionStatusChanged -= Refresh;
+    }
+}

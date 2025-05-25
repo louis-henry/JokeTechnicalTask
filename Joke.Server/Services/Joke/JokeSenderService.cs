@@ -7,10 +7,12 @@ namespace Joke.Server.Services.Joke;
 
 internal class JokeSenderService(
     IHubContext<JokeHub> hubContext,
+    IJokeViewService jokeViewService,
     ILogger<JokeSenderService> logger
 ) : IJokeSenderService
 {
     private readonly IHubContext<JokeHub> _hubContext = hubContext ?? throw new ArgumentException(nameof(hubContext));
+    private readonly IJokeViewService _jokeViewService = jokeViewService ?? throw new ArgumentException(nameof(jokeViewService));
     private readonly ILogger<JokeSenderService> _logger = logger ?? throw new ArgumentException(nameof(logger));
     public async Task SendJokeAsync(JokeEntity joke)
     {
@@ -20,7 +22,7 @@ internal class JokeSenderService(
             
             await _hubContext.Clients.All.SendAsync("ReceiveJoke", joke);
 
-            // TODO: Emit here
+            _jokeViewService.EmitSentJokesChange();
         }
         catch (Exception ex)
         {
@@ -28,16 +30,7 @@ internal class JokeSenderService(
             throw;
         }
     }
-    public void EmitFetchedJokes()
-    {
-        // TODO: For UI
-    }
-    public void EmitSentJoke()
-    {
-        // TODO: For UI
-    }
-    public void EmitReceivedJoke()
-    {
-        // TODO: For UI
-    }
+    public void EmitFetchedJokes() => _jokeViewService.EmitJokesChange();
+    public void EmitSentJoke() => _jokeViewService.EmitSentJokesChange();
+    public void EmitReceivedJoke() => _jokeViewService.EmitTranslatedJokesChange();
 }

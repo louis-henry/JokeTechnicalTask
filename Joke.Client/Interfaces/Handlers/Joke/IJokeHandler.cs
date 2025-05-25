@@ -4,8 +4,7 @@ namespace Joke.Client.Interfaces.Handlers.Joke;
 
 public interface IJokeHandler
 {
-    Task<bool> StartAsync();
-    Task StopAsync(bool exitApp = true);
-    void CancelAllTasks();
+    Task<bool> StartAsync(CancellationTokenSource cancellationTokenSource);
+    Task StopAsync(CancellationToken cancellationToken, bool exitApp = true);
     Task ProcessMessageAsync(JokeEntity message, CancellationToken cancellationToken);
 }

@@ -1,0 +1,44 @@
+@using Joke.Server.Interfaces.Services.Joke
+@using Joke.Shared.Models.Joke
+@inject IJokeViewService JokeViewService
+@implements IDisposable
+
+<RadzenDataGrid @ref="@_grid" Data="@_data" TItem="JokeEntity" style="height: 350px" AllowFiltering="false" AllowPaging="false" AllowSorting="false">
+    <Columns>
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Joke" Title="Joke" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Answer" Title="Answer" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="TranslatedJoke" Title="Translated Joke" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="TranslatedAnswer" Title="Translated Answer" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="TimeToTranslate" Title="Time to Translate (ms)" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    RadzenDataGrid<JokeEntity> _grid = new();
+    public IEnumerable<JokeEntity> _data = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Yield();
+        JokeViewService.TranslatedJokesChanged += Refresh;
+        Refresh();
+    }
+    
+    private async void Refresh()
+    {
+        try
+        {
+            _data = JokeViewService.GetTranslatedJokes();
+            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(_grid.Reload);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+    
+    public void Dispose()
+        => JokeViewService.TranslatedJokesChanged -= Refresh;
+}

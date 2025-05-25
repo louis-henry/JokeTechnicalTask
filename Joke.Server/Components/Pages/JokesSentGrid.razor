@@ -1,0 +1,34 @@
+@using Joke.Server.Interfaces.Services.Joke
+@using Joke.Shared.Models.Joke
+@inject IJokeViewService JokeViewService
+@implements IDisposable
+
+<RadzenDataGrid @ref="@_grid" Data="@_data" TItem="JokeEntity" style="height: 350px" AllowFiltering="false" AllowPaging="false" AllowSorting="false">
+    <Columns>
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Joke" Title="Joke" />
+        <RadzenDataGridColumn TItem="JokeEntity" Property="Answer" Title="Answer" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    RadzenDataGrid<JokeEntity> _grid = new();
+    public IEnumerable<JokeEntity> _data = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Yield();
+        JokeViewService.SentJokesChanged += Refresh;
+        Refresh();
+    }
+    
+    private async void Refresh()
+    {
+        _data = JokeViewService.GetSentJokes();
+        await InvokeAsync(StateHasChanged);
+        await InvokeAsync(_grid.Reload);
+    }
+    
+    public void Dispose()
+        => JokeViewService.SentJokesChanged -= Refresh;
+}

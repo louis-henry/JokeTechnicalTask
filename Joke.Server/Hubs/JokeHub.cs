@@ -1,22 +1,26 @@
 using Joke.Server.Interfaces.Services.Joke;
 using Joke.Shared.Models.Communication;
 using Joke.Shared.Models.Joke;
+using Joke.Shared.Types.Connection;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Joke.Server.Hubs;
 
 public class JokeHub(
     IJokeService jokeService,
+    IJokeViewService jokeViewService,
     ILogger<JokeHub> logger
 ) : Hub
 {
     private readonly IJokeService _jokeService = jokeService ?? throw new ArgumentException(nameof(jokeService));
+    private readonly IJokeViewService _jokeViewService = jokeViewService ?? throw new ArgumentException(nameof(jokeViewService));
     private readonly ILogger<JokeHub> _logger = logger ?? throw new ArgumentException(nameof(logger));
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     
     public override async Task OnConnectedAsync()
     {
         _logger.LogDebug("Client connected: {ConnectionId}", Context.ConnectionId);
+        _jokeViewService.EmitConnectionStatusChangeChange(ConnectionStatus.Connected);
         
         var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, Context.ConnectionAborted);
         _ = _jokeService.RunSenderTaskAsync(linkedCts.Token);
@@ -27,6 +31,7 @@ public class JokeHub(
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         _logger.LogDebug("Client disconnected: {ConnectionId}", Context.ConnectionId);
+        _jokeViewService.EmitConnectionStatusChangeChange(ConnectionStatus.Disconnected);
         
         await _cancellationTokenSource.CancelAsync();
         await base.OnDisconnectedAsync(exception);

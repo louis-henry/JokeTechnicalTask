@@ -41,7 +41,8 @@ builder.Services
     .AddScoped<IJokeService, JokeService>()
     .AddScoped<IJokeSenderService, JokeSenderService>()
     .AddScoped<IOpenRouterService, OpenRouterService>()
-    .AddScoped<IHttpService, HttpService>();
+    .AddScoped<IHttpService, HttpService>()
+    .AddSingleton<IJokeViewService, JokeViewService>();
 
 // Add Repositories
 builder.Services

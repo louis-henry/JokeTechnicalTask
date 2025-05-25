@@ -29,15 +29,21 @@ internal class JokeHandler(
         .Build();
     
     private long _completeCount = 0;
-    private readonly CancellationTokenSource _cts = new CancellationTokenSource();
     
-    public async Task<bool> StartAsync()
+    public async Task<bool> StartAsync(CancellationTokenSource cancellationTokenSource)
     {
         _connection.On<JokeEntity>("ReceiveJoke", async message =>
         {
             await Task.Yield();
-            Task.Run(() => ProcessMessageAsync(message, _cts.Token));
+            Task.Run(() => ProcessMessageAsync(message, cancellationTokenSource.Token));
         });
+        _connection.Closed += async (error) =>
+        {
+            Console.WriteLine("Connection closed!");
+            _logger.LogDebug("{@method} Connected closed", nameof(StartAsync));
+            await cancellationTokenSource.CancelAsync();
+            await Task.CompletedTask;
+        };
         
         try
         {
@@ -52,7 +58,7 @@ internal class JokeHandler(
         }
     }
 
-    public async Task StopAsync(bool exitApp = true)
+    public async Task StopAsync(CancellationToken cancellationToken, bool exitApp = true)
     {
         if (_connection.State != HubConnectionState.Connected)
         {
@@ -60,7 +66,7 @@ internal class JokeHandler(
             return;
         }
         
-        await _connection.StopAsync();
+        await _connection.StopAsync(cancellationToken);
         await _connection.DisposeAsync();
         _logger.LogInformation("{@method} Disconnecting from server...", nameof(StartAsync));
         
@@ -70,7 +76,6 @@ internal class JokeHandler(
         _logger.LogInformation("{@method} Stopping application...", nameof(StartAsync));
         _hostApplicationLifetime.StopApplication();
     }
-    public void CancelAllTasks() => Task.Run(() => _cts.Cancel());
     public async Task ProcessMessageAsync(JokeEntity message, CancellationToken cancellationToken)
     {
         try
@@ -141,8 +146,7 @@ internal class JokeHandler(
             
             if (Interlocked.Read(ref _completeCount) >= Limits.ClientEndCount)
             {
-                await StopAsync();
-                CancelAllTasks();
+                await StopAsync(cancellationToken);
             }
         }
     }
