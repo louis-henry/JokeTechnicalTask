@@ -1,4 +1,7 @@
-﻿using Joke.Client.Interfaces.Services.Joke;
+﻿using Joke.Shared.Options;
+using Joke.Client.Handlers.Joke;
+using Joke.Client.Interfaces.Handlers.Joke;
+using Joke.Client.Interfaces.Services.Joke;
 using Joke.Client.Interfaces.Services.Menu;
 using Joke.Client.Services.Joke;
 using Joke.Client.Services.Menu;
@@ -38,10 +41,12 @@ builder.Services
     .AddScoped<IJokeService, JokeService>()
     .AddScoped<IOpenRouterService, OpenRouterService>()
     .AddScoped<IHttpService, HttpService>()
-    .AddSingleton<IMenuService, MenuService>();
+    .AddSingleton<IMenuService, MenuService>()
+    .AddSingleton<IJokeHandler, JokeHandler>();
 
 // AppSettings as IOptions<T>
 builder.Services.Configure<OpenRouterOptions>(builder.Configuration.GetSection(OpenRouterOptions.PropertyName));
+builder.Services.Configure<ServerOptions>(builder.Configuration.GetSection(ServerOptions.PropertyName));
 
 // Start
 var host = builder.Build();

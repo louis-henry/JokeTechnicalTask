@@ -1,3 +1,6 @@
+using Joke.Server.Hubs;
+using Joke.Server.Interfaces.Services.Joke;
+using Joke.Server.Services.Joke;
 using Joke.Shared.Interfaces.Services.Http;
 using Joke.Shared.Interfaces.Services.OpenRouter;
 using Joke.Shared.Options;
@@ -33,6 +36,8 @@ builder.Services.AddHttpClient();
 
 // Add Services
 builder.Services
+    .AddScoped<IJokeService, JokeService>()
+    .AddScoped<IJokeSenderService, JokeSenderService>()
     .AddScoped<IOpenRouterService, OpenRouterService>()
     .AddScoped<IHttpService, HttpService>();
 
@@ -59,6 +64,7 @@ app.MapStaticAssets();
 app.MapBlazorHub();
 
 // Map endpoints via top level routing
+app.MapHub<JokeHub>("/ws");
 app.MapFallbackToPage("/_Host");
 
 // Run
