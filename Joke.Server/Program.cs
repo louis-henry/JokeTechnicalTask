@@ -1,5 +1,8 @@
-using Joke.Server.Components;
+using Joke.Shared.Interfaces.Services.Http;
+using Joke.Shared.Interfaces.Services.OpenRouter;
 using Joke.Shared.Options;
+using Joke.Shared.Services.Http;
+using Joke.Shared.Services.OpenRouter;
 using Radzen;
 using Serilog;
 
@@ -29,7 +32,9 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
 
 // Add Services
-// TODO
+builder.Services
+    .AddScoped<IOpenRouterService, OpenRouterService>()
+    .AddScoped<IHttpService, HttpService>();
 
 // Add Repositories
 // TODO

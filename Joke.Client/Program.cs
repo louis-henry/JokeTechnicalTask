@@ -2,7 +2,11 @@
 using Joke.Client.Interfaces.Services.Menu;
 using Joke.Client.Services.Joke;
 using Joke.Client.Services.Menu;
+using Joke.Shared.Interfaces.Services.Http;
+using Joke.Shared.Interfaces.Services.OpenRouter;
 using Joke.Shared.Options;
+using Joke.Shared.Services.Http;
+using Joke.Shared.Services.OpenRouter;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +36,8 @@ builder.Services.AddHttpClient();
 // Add Services
 builder.Services
     .AddScoped<IJokeService, JokeService>()
+    .AddScoped<IOpenRouterService, OpenRouterService>()
+    .AddScoped<IHttpService, HttpService>()
     .AddSingleton<IMenuService, MenuService>();
 
 // AppSettings as IOptions<T>
