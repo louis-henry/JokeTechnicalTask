@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Server", "Joke.Server\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Shared", "Joke.Shared\Joke.Shared.csproj", "{622F1437-FD9D-4CFD-90CE-FBB751968BCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Data", "Joke.Data\Joke.Data.csproj", "{0F6A0186-58B6-4434-88B5-1AC3E7659425}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{622F1437-FD9D-4CFD-90CE-FBB751968BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{622F1437-FD9D-4CFD-90CE-FBB751968BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{622F1437-FD9D-4CFD-90CE-FBB751968BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
