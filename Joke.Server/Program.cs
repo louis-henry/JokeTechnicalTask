@@ -1,28 +1,60 @@
 using Joke.Server.Components;
+using Radzen;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRazorPages();
+builder.Services
+    .AddServerSideBlazor()
+    .AddHubOptions(options =>
+    {
+        options.EnableDetailedErrors = true;
+    });
+
+// Add SignalR
+builder.Services.AddSignalR();
+
+// Add HttpClient
+builder.Services.AddHttpClient();
+
+// Add Services
+// TODO
+
+// Add Repositories
+// TODO
+
+// Add Radzen UI
+builder.Services.AddRadzenComponents();
+
+// AppSettings as IOptions<T>
+// TODO
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Default setup
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
-
-
 app.UseAntiforgery();
-
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapBlazorHub();
 
+// Map endpoints via top level routing
+app.MapFallbackToPage("/_Host");
+
+// Run
+Log.Logger.Information("Listening at http://localhost:5044");
 app.Run();

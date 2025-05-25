@@ -33,6 +33,9 @@ builder.Services
     .AddScoped<IJokeService, JokeService>()
     .AddSingleton<IMenuService, MenuService>();
 
+// AppSettings as IOptions<T>
+// TODO
+
 // Start
 var host = builder.Build();
 var menu = host.Services.GetRequiredService<IMenuService>();
