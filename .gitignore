@@ -1,0 +1,4 @@
+/Joke.Server/appsettings.json
+/Joke.Server/obj/*
+/Joke.Client/obj/*
+.idea/*
