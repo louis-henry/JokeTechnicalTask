@@ -1,0 +1,24 @@
+{
+  "id" : "test_id",
+  "provider" : "mock",
+  "model" : "test_model",
+  "object" : "chat.completion",
+  "created" : 1748105380,
+  "choices" : [ {
+    "logprobs" : null,
+    "finish_reason" : "stop",
+    "native_finish_reason" : "stop",
+    "index" : 0,
+    "message" : {
+      "role" : "assistant",
+      "content" : "{\n  \"id\": \"efc26064-1259-47e3-8c08-488866677dcc\",\n  \"joke\": \"Why don't scientists trust atoms?\",\n  \"answer\": \"Because they make up everything!\",\n  \"translated_joke\": \"Warum vertrauen Wissenschaftler Atomen nicht?\",\n  \"translated_answer\": \"Weil sie alles erfinden!\"\n}",
+      "refusal" : null,
+      "reasoning" : null
+    }
+  } ],
+  "usage" : {
+    "prompt_tokens" : 64,
+    "completion_tokens" : 352,
+    "total_tokens" : 416
+  }
+}

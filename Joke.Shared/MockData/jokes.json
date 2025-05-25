@@ -1,0 +1,24 @@
+{
+  "id" : "test_id",
+  "provider" : "mock",
+  "model" : "test_model",
+  "object" : "chat.completion",
+  "created" : 1748105380,
+  "choices" : [ {
+    "logprobs" : null,
+    "finish_reason" : "stop",
+    "native_finish_reason" : "stop",
+    "index" : 0,
+    "message" : {
+      "role" : "assistant",
+      "content" : "{\n  \"jokes\": [\n    {\n      \"id\": \"efc26064-1259-47e3-8c08-488866677dcc\",\n      \"joke\": \"Why don't scientists trust atoms?\",\n      \"answer\": \"Because they make up everything!\"\n    },\n    {\n      \"id\": \"0500677d-e80a-4d77-831d-4e0da1df6c29\",\n      \"joke\": \"Why don't eggs tell jokes?\",\n      \"answer\": \"They'd crack each other up!\"\n    },\n    {\n      \"id\": \"53313417-10ea-4248-a7f6-12e0825e94cc\",\n      \"joke\": \"What do you call cheese that isn't yours?\",\n      \"answer\": \"Nacho cheese!\"\n    },\n    {\n      \"id\": \"0c768ee0-2579-48b7-8522-05c6a9c65453\",\n      \"joke\": \"What do you call a boomerang that won't come back?\",\n      \"answer\": \"A stick\"\n    },\n    {\n      \"id\": \"ec8da195-bb19-4c27-9196-5fc44dd78aac\",\n      \"joke\": \"What did the traffic light say to the car?\",\n      \"answer\": \"Don't look! I'm changing!\"\n    },\n    {\n      \"id\": \"791487af-a01f-4353-918f-5e2afdb9b5e6\",\n      \"joke\": \"Why did the coffee file a police report?\",\n      \"answer\": \"It got mugged!\"\n    },\n    {\n      \"id\": \"197546df-411d-4147-ae74-fd70d2f88853\",\n      \"joke\": \"What has an eye, but cannot see?\",\n      \"answer\": \"A needle.\"\n    },\n    {\n      \"id\": \"589d0918-90cc-4987-9798-6e01e356e8af\",\n      \"joke\": \"Why don't skeletons fight each other?\",\n      \"answer\": \"They don't have the guts!\"\n    },\n    {\n      \"id\": \"70608483-27af-4d14-87e8-2338a79fdfee\",\n      \"joke\": \"What musical instrument is found in the bathroom?\",\n      \"answer\": \"A tuba toothpaste!\"\n    },\n    {\n      \"id\": \"4f190cc0-2284-4d69-9bed-4f8b2dd0e934\",\n      \"joke\": \"What shirt should you wear to a tea party?\",\n      \"answer\": \"A t-shirt!\"\n    }\n  ]\n}",
+      "refusal" : null,
+      "reasoning" : null
+    }
+  } ],
+  "usage" : {
+    "prompt_tokens" : 64,
+    "completion_tokens" : 352,
+    "total_tokens" : 416
+  }
+}
