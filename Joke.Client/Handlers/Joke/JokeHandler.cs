@@ -2,7 +2,7 @@ using Joke.Client.Interfaces.Handlers.Joke;
 
 namespace Joke.Client.Handlers.Joke;
 
-public class JokeHandler : IJokeHandler
+internal class JokeHandler : IJokeHandler
 {
     public async Task StartAsync()
     {
