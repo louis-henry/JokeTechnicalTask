@@ -4,7 +4,7 @@ namespace Joke.Shared.Models.Joke;
 
 public class JokeEntity
 {
-    public required string Id { get; set; }
+    public required Guid Id { get; set; }
     public required string? Joke { get; set; }
     public string? Answer { get; set; }
     [JsonPropertyName("translated_joke")]
