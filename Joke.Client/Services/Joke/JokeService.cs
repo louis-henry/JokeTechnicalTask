@@ -6,7 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Joke.Client.Services.Joke;
 
-internal class JokeService(IOpenRouterService openRouterService, ILogger<JokeService> logger) : IJokeService
+/// <inheritdoc cref="IJokeService" />
+internal class JokeService(
+    IOpenRouterService openRouterService,
+    ILogger<JokeService> logger
+) : IJokeService
 {
     private readonly IOpenRouterService _openRouterService = openRouterService ?? throw new ArgumentException(nameof(openRouterService));
     private readonly ILogger<JokeService> _logger = logger ?? throw new ArgumentException(nameof(logger));

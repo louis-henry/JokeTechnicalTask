@@ -1,5 +1,9 @@
 namespace Joke.Shared.Constants;
 
+/// <summary>
+/// Constant values used throughout both Server and Client to define
+/// operational conditions (i.e., concurrency, delays etc.)
+/// </summary>
 public static class Limits
 {
     // Server

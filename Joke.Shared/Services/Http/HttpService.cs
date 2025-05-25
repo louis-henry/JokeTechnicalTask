@@ -5,7 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Joke.Shared.Services.Http;
 
-public class HttpService(IHttpClientFactory httpClientFactory, ILogger<HttpService> logger) : IHttpService
+/// <inheritdoc cref="IHttpService" />
+public class HttpService(
+    IHttpClientFactory httpClientFactory,
+    ILogger<HttpService> logger
+) : IHttpService
 {
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentException(nameof(httpClientFactory));
     private readonly ILogger<HttpService> _logger = logger ?? throw new ArgumentException(nameof(logger));

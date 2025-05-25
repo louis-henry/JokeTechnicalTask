@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace Joke.Client.Handlers.Joke;
 
+/// <inheritdoc cref="IJokeHandler" />
 internal class JokeHandler(
     IHostApplicationLifetime hostApplicationLifetime,
     IJokeService jokeService,

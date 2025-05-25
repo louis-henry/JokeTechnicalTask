@@ -8,6 +8,7 @@ using Joke.Shared.PromptRequests;
 
 namespace Joke.Server.Services.Joke;
 
+/// <inheritdoc cref="IJokeService" />
 internal class JokeService(
     IJokeSenderService jokeSenderService,
     IJokeRepository jokeRepository,

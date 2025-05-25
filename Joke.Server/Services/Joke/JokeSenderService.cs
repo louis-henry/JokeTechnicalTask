@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Joke.Server.Services.Joke;
 
+/// <inheritdoc cref="IJokeSenderService" />
 internal class JokeSenderService(
     IHubContext<JokeHub> hubContext,
     IJokeViewService jokeViewService,

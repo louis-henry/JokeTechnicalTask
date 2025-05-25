@@ -7,7 +7,6 @@ using Joke.Client.Services.Joke;
 using Joke.Client.Services.Menu;
 using Joke.Shared.Interfaces.Services.Http;
 using Joke.Shared.Interfaces.Services.OpenRouter;
-using Joke.Shared.Options;
 using Joke.Shared.Services.Http;
 using Joke.Shared.Services.OpenRouter;
 using Microsoft.Extensions.Configuration;

@@ -3,6 +3,7 @@ using Joke.Shared.Models.Joke;
 
 namespace Joke.Data.Repositories.Joke;
 
+/// <inheritdoc cref="IJokeRepository" />
 public class JokeRepository : IJokeRepository
 {
     private readonly List<JokeEntity> _jokes = [];

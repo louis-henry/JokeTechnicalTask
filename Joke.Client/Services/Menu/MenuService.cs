@@ -5,7 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Joke.Client.Services.Menu;
 
-public class MenuService(IServiceProvider serviceProvider, ILogger<MenuService> logger) : IMenuService
+/// <inheritdoc cref="IMenuService" />
+public class MenuService(
+    IServiceProvider serviceProvider,
+    ILogger<MenuService> logger
+) : IMenuService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider ?? throw new ArgumentException(nameof(serviceProvider));
     private readonly ILogger<MenuService> _logger = logger ?? throw new ArgumentException(nameof(logger));

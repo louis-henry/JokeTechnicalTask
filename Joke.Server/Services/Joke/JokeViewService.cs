@@ -5,6 +5,7 @@ using Joke.Shared.Types.Connection;
 
 namespace Joke.Server.Services.Joke;
 
+/// <inheritdoc cref="IJokeService" />
 public class JokeViewService(IJokeRepository jokeRepository) : IJokeViewService
 {
     public event Action? JokesChanged;

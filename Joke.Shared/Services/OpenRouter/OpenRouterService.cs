@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace Joke.Shared.Services.OpenRouter;
 
+/// <inheritdoc cref="IOpenRouterService" />
 public class OpenRouterService(
     IHttpService httpService,
     IOptions<OpenRouterOptions> options,
