@@ -1,3 +1,4 @@
+using Joke.Data.Interfaces.Repositories.Joke;
 using Joke.Server.Interfaces.Services.Joke;
 using Joke.Shared.Constants;
 using Joke.Shared.Interfaces.Services.OpenRouter;
@@ -9,11 +10,13 @@ namespace Joke.Server.Services.Joke;
 
 internal class JokeService(
     IJokeSenderService jokeSenderService,
+    IJokeRepository jokeRepository,
     IOpenRouterService openRouterService,
     ILogger<JokeService> logger
 ) : IJokeService
 {
     private readonly IJokeSenderService _jokeSenderService = jokeSenderService ?? throw new ArgumentException(nameof(jokeSenderService));
+    private readonly IJokeRepository _jokeRepository = jokeRepository ?? throw new ArgumentException(nameof(jokeRepository));
     private readonly IOpenRouterService _openRouterService = openRouterService ?? throw new ArgumentException(nameof(openRouterService));
     private readonly ILogger<JokeService> _logger = logger ?? throw new ArgumentException(nameof(logger));
     public async Task RunSenderTaskAsync(CancellationToken cancellationToken)
@@ -53,7 +56,7 @@ internal class JokeService(
                 return;
             }
             
-            // TODO: update when repo implemented
+            _jokeRepository.AddTranslatedJokes([receivedJoke]);
             _jokeSenderService.EmitReceivedJoke();
         }
         catch (Exception ex)
@@ -71,8 +74,14 @@ internal class JokeService(
             
             var request = JokesRequest.GetRequest(10);
             var response = await _openRouterService.QueryModelAsync<JokesResponse>(request);
+            if (response is null)
+            {
+                _logger.LogWarning("{@method} Warning - fetched jokes object is null", nameof(FetchJokesAsync));
+                return;
+            }
             
-            // TODO: Handler with repo
+            _jokeRepository.AddJokes(response?.Jokes ?? []);
+            _jokeSenderService.EmitFetchedJokes();
         }
         catch (OperationCanceledException ex) 
         {
@@ -91,13 +100,7 @@ internal class JokeService(
             _logger.LogDebug("{@method} Called", nameof(SendJokeAsync));
             cancellationToken.ThrowIfCancellationRequested();
             
-            // TODO: update when repo implemented
-            var newJoke = new JokeEntity
-            {
-                Id = Guid.NewGuid(),
-                Joke = "Placegolder"
-            };
-            
+            var newJoke = _jokeRepository.GetJoke();
             if (newJoke is null)
             {
                 _logger.LogInformation("{@method} No jokes available, fetching new jokes", nameof(SendJokeAsync));
@@ -105,7 +108,7 @@ internal class JokeService(
                 return;
             }
         
-            // TODO: update repo
+            _jokeRepository.MarkSentJokes([newJoke.Id]);
             await _jokeSenderService.SendJokeAsync(newJoke);
         }
         catch (OperationCanceledException ex) 

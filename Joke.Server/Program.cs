@@ -1,3 +1,5 @@
+using Joke.Data.Interfaces.Repositories.Joke;
+using Joke.Data.Repositories.Joke;
 using Joke.Server.Hubs;
 using Joke.Server.Interfaces.Services.Joke;
 using Joke.Server.Services.Joke;
@@ -42,7 +44,8 @@ builder.Services
     .AddScoped<IHttpService, HttpService>();
 
 // Add Repositories
-// TODO
+builder.Services
+    .AddSingleton<IJokeRepository, JokeRepository>();
 
 // Add Radzen UI
 builder.Services.AddRadzenComponents();
