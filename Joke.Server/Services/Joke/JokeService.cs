@@ -55,7 +55,7 @@ internal class JokeService(
         _logger.LogInformation("{@method} Task complete", nameof(RunSenderTaskAsync));
     }
 
-    public async Task ReceiveJokeAsync(JokeEntity? receivedJoke)
+    public async Task ReceiveJokeAsync(JokeEntity? receivedJoke, bool isSuccess = true)
     {
         try
         {
@@ -67,8 +67,15 @@ internal class JokeService(
                 _logger.LogWarning("{@method} no translated jokes received", nameof(ReceiveJokeAsync));
                 return;
             }
-            
-            _jokeRepository.AddTranslatedJokes([receivedJoke]);
+
+            if (isSuccess)
+            {
+                _jokeRepository.AddTranslatedJokes([receivedJoke]);
+            }
+            else
+            {
+                _jokeRepository.RemoveSentJokes([receivedJoke]);
+            }
             _jokeSenderService.EmitReceivedJoke();
         }
         catch (Exception ex)

@@ -5,7 +5,7 @@ namespace Joke.Server.Interfaces.Services.Joke;
 public interface IJokeService
 {
     Task RunSenderTaskAsync(CancellationToken cancellationToken);
-    Task ReceiveJokeAsync(JokeEntity? receivedJoke);
+    Task ReceiveJokeAsync(JokeEntity? receivedJoke, bool isSuccess = true);
     Task FetchJokesAsync(CancellationToken cancellationToken);
     Task SendJokeAsync(CancellationToken cancellationToken);
 }

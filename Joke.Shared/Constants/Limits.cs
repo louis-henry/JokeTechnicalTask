@@ -8,7 +8,8 @@ public static class Limits
     public const int ServerSenderInterval = 200;
     
     // Client
-    public const int ClientConcurrentOperationThreadLimit = 2;
+    public const int ClientConcurrentOperationThreadLimit = 3;
     public const int ClientEndCount = 5;
     public const int ClientIntakeLimit = 5;
+    public const int ClientFailedMax = 10;
 }

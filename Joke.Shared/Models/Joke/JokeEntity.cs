@@ -13,4 +13,6 @@ public class JokeEntity
     public string? TranslatedAnswer { get; set; }
     [JsonPropertyName("time_to_translate")]
     public long? TimeToTranslate { get; set; }
+    public void SetTimeToTranslate(long ms)
+        => TimeToTranslate = ms;
 }

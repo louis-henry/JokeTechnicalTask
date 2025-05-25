@@ -4,4 +4,5 @@ public class ClientProcessedResult<T>
 {
     public T? Original { get; set; }
     public T? Processed { get; set; }
+    public bool IsSuccess { get; set; }
 }

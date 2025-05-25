@@ -40,6 +40,6 @@ public class JokeHub(
     public async Task ReturnJoke(ClientProcessedResult<JokeEntity> result)
     {
         _logger.LogInformation("Received from Client: {ConnectionId} with result Id: {@id}", Context.ConnectionId, result.Processed?.Id);
-        await _jokeService.ReceiveJokeAsync(result.Processed);
+        await _jokeService.ReceiveJokeAsync(result.IsSuccess ? result.Processed : result.Original, result.IsSuccess);
     }
 }

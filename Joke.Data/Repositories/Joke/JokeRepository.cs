@@ -26,9 +26,9 @@ public class JokeRepository : IJokeRepository
             _jokes.Remove(target);
         });
     }
-    public void AddTranslatedJokes(IEnumerable<JokeEntity> translatedJokes)
+    public void RemoveSentJokes(IEnumerable<JokeEntity> jokes)
     {
-        var jokesAsList = translatedJokes.ToList();
+        var jokesAsList = jokes.ToList();
         jokesAsList.ForEach(joke =>
         {
             var target = _sentJokes.FirstOrDefault(x => x.Id == joke.Id);
@@ -36,6 +36,11 @@ public class JokeRepository : IJokeRepository
             
             _sentJokes.Remove(target);
         });
+    }
+    public void AddTranslatedJokes(IEnumerable<JokeEntity> translatedJokes)
+    {
+        var jokesAsList = translatedJokes.ToList();
+        RemoveSentJokes(jokesAsList);
         _translatedJokes.AddRange(jokesAsList);
     }
 }

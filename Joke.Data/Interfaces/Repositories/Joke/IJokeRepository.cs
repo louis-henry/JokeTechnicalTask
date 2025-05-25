@@ -11,5 +11,6 @@ public interface IJokeRepository
     int GetSentJokesCount();
     void AddJokes(IEnumerable<JokeEntity> newJokes);
     void MarkSentJokes(IEnumerable<Guid> ids);
+    void RemoveSentJokes(IEnumerable<JokeEntity> jokes);
     void AddTranslatedJokes(IEnumerable<JokeEntity> translatedJokes);
 }

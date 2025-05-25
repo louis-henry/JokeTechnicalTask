@@ -29,6 +29,7 @@ internal class JokeHandler(
         .Build();
     
     private long _completeCount = 0;
+    private long _failedCount = 0;
     
     public async Task<bool> StartAsync(CancellationTokenSource cancellationTokenSource)
     {
@@ -39,7 +40,6 @@ internal class JokeHandler(
         });
         _connection.Closed += async (error) =>
         {
-            Console.WriteLine("Connection closed!");
             _logger.LogDebug("{@method} Connected closed", nameof(StartAsync));
             await cancellationTokenSource.CancelAsync();
             await Task.CompletedTask;
@@ -106,26 +106,35 @@ internal class JokeHandler(
             if (translatedJoke is null)
             {
                 _logger.LogWarning("{@method} Translation failed for {@id}", nameof(ProcessMessageAsync), message.Id);
-                return;
             }
             
             cancellationToken.ThrowIfCancellationRequested();
             stopWatch.Stop();
-            translatedJoke.TimeToTranslate = stopWatch.ElapsedMilliseconds;
+            translatedJoke?.SetTimeToTranslate(stopWatch.ElapsedMilliseconds);
             var result = new ClientProcessedResult<JokeEntity>
             {
                 Original = message,
-                Processed = translatedJoke
+                Processed = translatedJoke,
+                IsSuccess = translatedJoke is not null
             };
 
             if (_connection.State != HubConnectionState.Connected)
             {
-                _logger.LogWarning("{@method} Connection is no longer active, abandon task with Id: {@id}", nameof(ProcessMessageAsync), message.Id);
+                _logger.LogWarning("{@method} Connection is no longer active, abandon task with Id: {@id}",
+                    nameof(ProcessMessageAsync), message.Id);
                 return;
             }
             
             await _connection.InvokeAsync("ReturnJoke", result, cancellationToken: cancellationToken);
-            _logger.LogInformation("{@method} Message sent from client with Id: {@id}", "ReceiveJoke", message.Id);
+            _logger.LogInformation("{@method} Message sent from client with Id: {@id}", nameof(ProcessMessageAsync), message.Id);
+            
+            if (!result.IsSuccess)
+            {
+                _logger.LogWarning("{@method} Message sent from client without translation success, Id: {@id}", 
+                    nameof(ProcessMessageAsync), message.Id);
+                Interlocked.Increment(ref _failedCount);
+                return;
+            }
             
             var currentCompleted = Interlocked.Increment(ref _completeCount);
             _logger.LogDebug("{@method} Completed count is now {@count}", nameof(ProcessMessageAsync), currentCompleted);
@@ -137,17 +146,25 @@ internal class JokeHandler(
         catch (Exception ex)
         {
             _logger.LogError(ex, "{@method} error - could not process message", nameof(ProcessMessageAsync));
+            Interlocked.Increment(ref _failedCount);
         }
         finally
         {
-            _semaphore.Release();
-            _logger.LogDebug("{@method} Permit released, {@permits} semaphore permits available", 
-                nameof(ProcessMessageAsync), _semaphore.CurrentCount);
+            await ProcessMessageFinally(cancellationToken);
+        }
+    }
+
+    private async Task ProcessMessageFinally(CancellationToken cancellationToken)
+    {
+        _semaphore.Release();
+        _logger.LogDebug("{@method} Permit released, {@permits} semaphore permits available", 
+            nameof(ProcessMessageAsync), _semaphore.CurrentCount);
             
-            if (Interlocked.Read(ref _completeCount) >= Limits.ClientEndCount)
-            {
-                await StopAsync(cancellationToken);
-            }
+        // Stop when the success count is reached OR the failed threshold is exceeded
+        if (Interlocked.Read(ref _completeCount) >= Limits.ClientEndCount 
+            || Interlocked.Read(ref _failedCount) >= Limits.ClientFailedMax)
+        {
+            await StopAsync(cancellationToken);
         }
     }
 }
