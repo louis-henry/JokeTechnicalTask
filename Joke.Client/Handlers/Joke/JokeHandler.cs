@@ -22,12 +22,13 @@ internal class JokeHandler(
     private readonly IHostApplicationLifetime _hostApplicationLifetime = hostApplicationLifetime ?? throw new ArgumentException(nameof(hostApplicationLifetime));
     private readonly IJokeService _jokeService = jokeService ?? throw new ArgumentException(nameof(jokeService)); 
     private readonly ILogger<JokeHandler> _logger = logger ?? throw new ArgumentException(nameof(logger));
+    private readonly SemaphoreSlim _semaphore = new(Limits.ClientConcurrentOperationThreadLimit);
     private readonly HubConnection _connection = new HubConnectionBuilder()
         .WithUrl($"{serverOptions?.Value?.FullUrl ?? string.Empty}")
         .WithAutomaticReconnect()
         .Build();
     
-    private int _completeCount = 0;
+    private long _completeCount = 0;
     private readonly CancellationTokenSource _cts = new CancellationTokenSource();
     
     public async Task<bool> StartAsync()
@@ -69,13 +70,19 @@ internal class JokeHandler(
         _logger.LogInformation("{@method} Stopping application...", nameof(StartAsync));
         _hostApplicationLifetime.StopApplication();
     }
-
+    public void CancelAllTasks() => Task.Run(() => _cts.Cancel());
     public async Task ProcessMessageAsync(JokeEntity message, CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogDebug("{@method} Message received by client with Id: {@id}", 
                 nameof(ProcessMessageAsync), message.Id);
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // Add to queue, check for cancellation
+            _logger.LogDebug("{@method} {@permits} Semaphore permits available", 
+                nameof(ProcessMessageAsync), _semaphore.CurrentCount);
+            await _semaphore.WaitAsync(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             
             // Do not process any more requests when limit exceeded
@@ -105,10 +112,18 @@ internal class JokeHandler(
                 Original = message,
                 Processed = translatedJoke
             };
+
+            if (_connection.State != HubConnectionState.Connected)
+            {
+                _logger.LogWarning("{@method} Connection is no longer active, abandon task with Id: {@id}", nameof(ProcessMessageAsync), message.Id);
+                return;
+            }
             
             await _connection.InvokeAsync("ReturnJoke", result, cancellationToken: cancellationToken);
             _logger.LogInformation("{@method} Message sent from client with Id: {@id}", "ReceiveJoke", message.Id);
-            _completeCount++;
+            
+            var currentCompleted = Interlocked.Increment(ref _completeCount);
+            _logger.LogDebug("{@method} Completed count is now {@count}", nameof(ProcessMessageAsync), currentCompleted);
         }
         catch (OperationCanceledException) 
         {
@@ -120,9 +135,14 @@ internal class JokeHandler(
         }
         finally
         {
-            if (_completeCount >= Limits.ClientEndCount)
+            _semaphore.Release();
+            _logger.LogDebug("{@method} Permit released, {@permits} semaphore permits available", 
+                nameof(ProcessMessageAsync), _semaphore.CurrentCount);
+            
+            if (Interlocked.Read(ref _completeCount) >= Limits.ClientEndCount)
             {
                 await StopAsync();
+                CancelAllTasks();
             }
         }
     }

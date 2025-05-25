@@ -19,6 +19,8 @@ internal class JokeService(
     private readonly IJokeRepository _jokeRepository = jokeRepository ?? throw new ArgumentException(nameof(jokeRepository));
     private readonly IOpenRouterService _openRouterService = openRouterService ?? throw new ArgumentException(nameof(openRouterService));
     private readonly ILogger<JokeService> _logger = logger ?? throw new ArgumentException(nameof(logger));
+    private readonly SemaphoreSlim _semaphore = new(Limits.ServerConcurrentOperationThreadLimit);
+    
     public async Task RunSenderTaskAsync(CancellationToken cancellationToken)
     {
         try
@@ -26,6 +28,16 @@ internal class JokeService(
             _logger.LogDebug("{@method} RunSenderTask loop started", nameof(RunSenderTaskAsync));
             while (!cancellationToken.IsCancellationRequested)
             {
+                // To avoid continually fetching new jokes, await the client
+                // processing confirmation. This will generally happen when a message
+                // is returned to the server and removed from the SentJokes collection.
+                if (_jokeRepository.GetSentJokesCount() >= Limits.ClientIntakeLimit)
+                {
+                    _logger.LogInformation("{@method} Awaiting translations for sent jokes...", nameof(RunSenderTaskAsync));
+                    await Task.Delay(Limits.ServerSenderDelay, cancellationToken);
+                    continue;
+                }
+                
                 await SendJokeAsync(cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 
@@ -70,6 +82,7 @@ internal class JokeService(
         try
         {
             _logger.LogDebug("{@method} Called", nameof(FetchJokesAsync));
+            await _semaphore.WaitAsync(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             
             var request = JokesRequest.GetRequest(10);
@@ -90,6 +103,12 @@ internal class JokeService(
         catch (Exception ex)
         {
             _logger.LogError(ex, "{@method} Error - failed to fetch new jokes", nameof(FetchJokesAsync));
+        }
+        finally
+        {
+            _semaphore.Release();
+            _logger.LogDebug("{@method} Permit released, {@permits} semaphore permits available", 
+                nameof(FetchJokesAsync), _semaphore.CurrentCount);
         }
     }
 
