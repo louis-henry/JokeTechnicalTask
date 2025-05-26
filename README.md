@@ -94,3 +94,4 @@ Some notes:
 - Testing with OpenRouter can, at times, yield incosistent results. It's possible the response will not meet the expected criteria (ie. JSON schema).
 - The project(s) default settings are setup to use a test mode. This will use mocked data.
 - Test mode should be run for both Client and Server, or neither (as the Client will be unable to match mocked data via the supplied Guids).
+- There is some basic unit test coverage. However, this is mostly as a demonstration as I did not want to spend too much time trying to cover absolutley everything.
