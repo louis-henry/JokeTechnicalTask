@@ -19,7 +19,7 @@ public class JokeHub(
     
     public override async Task OnConnectedAsync()
     {
-        _logger.LogDebug("Client connected: {ConnectionId}", Context.ConnectionId);
+        _logger.LogDebug("{@method} Client connected: {ConnectionId}", nameof(OnConnectedAsync), Context.ConnectionId);
         _jokeViewService.EmitConnectionStatusChangeChange(ConnectionStatus.Connected);
         
         var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, Context.ConnectionAborted);
@@ -30,7 +30,7 @@ public class JokeHub(
     
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        _logger.LogDebug("Client disconnected: {ConnectionId}", Context.ConnectionId);
+        _logger.LogDebug("{@method} Client disconnected: {ConnectionId}", nameof(OnDisconnectedAsync), Context.ConnectionId);
         _jokeViewService.EmitConnectionStatusChangeChange(ConnectionStatus.Disconnected);
         
         await _cancellationTokenSource.CancelAsync();
@@ -39,7 +39,7 @@ public class JokeHub(
     
     public async Task ReturnJoke(ClientProcessedResult<JokeEntity> result)
     {
-        _logger.LogInformation("Received from Client: {ConnectionId} with result Id: {@id}", Context.ConnectionId, result.Processed?.Id);
+        _logger.LogInformation("{@method} Received from Client: {ConnectionId} with result Id: {@id}", nameof(ReturnJoke), Context.ConnectionId, result.Processed?.Id);
         await _jokeService.ReceiveJokeAsync(result.IsSuccess ? result.Processed : result.Original, result.IsSuccess);
     }
 }
