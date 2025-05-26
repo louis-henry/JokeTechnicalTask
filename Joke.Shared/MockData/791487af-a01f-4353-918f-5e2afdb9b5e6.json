@@ -1,0 +1,24 @@
+{
+  "id" : "test_id",
+  "provider" : "mock",
+  "model" : "test_model",
+  "object" : "chat.completion",
+  "created" : 1748105380,
+  "choices" : [ {
+    "logprobs" : null,
+    "finish_reason" : "stop",
+    "native_finish_reason" : "stop",
+    "index" : 0,
+    "message" : {
+      "role" : "assistant",
+      "content" : "{\"id\":\"791487af-a01f-4353-918f-5e2afdb9b5e6\",\"joke\":\"Why did the coffee file a police report?\",\"answer\":\"It got mugged!\",\"translated_joke\":\"Warum hat der Kaffee eine Anzeige bei der Polizei erstattet?\",\"translated_answer\":\"Es wurde überfallen!\"}",
+      "refusal" : null,
+      "reasoning" : null
+    }
+  } ],
+  "usage" : {
+    "prompt_tokens" : 64,
+    "completion_tokens" : 352,
+    "total_tokens" : 416
+  }
+}

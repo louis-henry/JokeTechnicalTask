@@ -15,7 +15,7 @@ public static class MockResponse
     /// A string containing the file contents if the file is found and readable; otherwise, returns an empty string.
     /// </returns>
     /// <remarks>
-    /// The method assumes that mock data files are located in the <c>JC.Shared/MockData</c> directory relative to the application's base directory.
+    /// The method assumes that mock data files are located in the <c>Joke.Shared/MockData</c> directory relative to the application's base directory.
     /// </remarks>
     public static string GetData<T>(string? id = null)
     {

@@ -1,0 +1,24 @@
+{
+  "id" : "test_id",
+  "provider" : "mock",
+  "model" : "test_model",
+  "object" : "chat.completion",
+  "created" : 1748105380,
+  "choices" : [ {
+    "logprobs" : null,
+    "finish_reason" : "stop",
+    "native_finish_reason" : "stop",
+    "index" : 0,
+    "message" : {
+      "role" : "assistant",
+      "content" : "{\"id\":\"4f190cc0-2284-4d69-9bed-4f8b2dd0e934\",\"joke\":\"What shirt should you wear to a tea party?\",\"answer\":\"A t-shirt!\",\"translated_joke\":\"Welches Hemd sollte man zu einer Teeparty tragen?\",\"translated_answer\":\"Ein T-Shirt!\"}",
+      "refusal" : null,
+      "reasoning" : null
+    }
+  } ],
+  "usage" : {
+    "prompt_tokens" : 64,
+    "completion_tokens" : 352,
+    "total_tokens" : 416
+  }
+}
