@@ -88,6 +88,9 @@ public class OpenRouterService(
         
         try
         {
+            // Set query model
+            request.Model = _options.QueryModel.GetOpenRouterModel().GetDescription();
+            
             var jsonPayload = request.SerializeT(JsonOptions.DefaultSerializerOptions);
             var responseString = await _httpService.PostAsync(_options.Endpoint, jsonPayload, GetDefaultHeaders());
             if (responseString.IsJson())

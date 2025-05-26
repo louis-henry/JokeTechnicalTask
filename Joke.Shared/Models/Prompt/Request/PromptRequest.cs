@@ -6,6 +6,6 @@ public class PromptRequest
 {
     [JsonIgnore]
     public string? Id { get; init; }
-    public required string Model { get; init; }
+    public required string Model { get; set; }
     public IEnumerable<PromptRequestMessage> Messages { get; set; } = [];
 }

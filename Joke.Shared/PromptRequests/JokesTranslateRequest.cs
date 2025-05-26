@@ -8,12 +8,12 @@ namespace Joke.Shared.PromptRequests;
 
 public static class JokesTranslateRequest
 {
-    public static PromptRequest GetRequest(JokeEntity entity, OpenRouterModelType modelType = OpenRouterModelType.Default)
+    public static PromptRequest GetRequest(JokeEntity entity)
     {
         return new PromptRequest
         {
             Id = entity.Id.ToString(),
-            Model = modelType.GetDescription(),
+            Model = OpenRouterModelType.Default.GetDescription(),
             Messages = new List<PromptRequestMessage>
             {
                 new PromptRequestMessage

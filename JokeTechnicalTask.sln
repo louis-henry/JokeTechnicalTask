@@ -8,6 +8,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Shared", "Joke.Shared\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Data", "Joke.Data\Joke.Data.csproj", "{0F6A0186-58B6-4434-88B5-1AC3E7659425}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{507540F9-B070-4073-A2E0-3E1FBC798CC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Shared.Tests", "Joke.Shared.Tests\Joke.Shared.Tests.csproj", "{16D0CA4B-C343-44BD-9FF0-93F6F40BE581}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Client.Tests", "Joke.Client.Tests\Joke.Client.Tests.csproj", "{D95A3E1C-6FFA-424B-9E54-709DC4129936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joke.Server.Tests", "Joke.Server.Tests\Joke.Server.Tests.csproj", "{9843D277-FA06-4466-ADDA-DF0DEA6794AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +38,22 @@ Global
 		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F6A0186-58B6-4434-88B5-1AC3E7659425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16D0CA4B-C343-44BD-9FF0-93F6F40BE581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16D0CA4B-C343-44BD-9FF0-93F6F40BE581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16D0CA4B-C343-44BD-9FF0-93F6F40BE581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16D0CA4B-C343-44BD-9FF0-93F6F40BE581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95A3E1C-6FFA-424B-9E54-709DC4129936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95A3E1C-6FFA-424B-9E54-709DC4129936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95A3E1C-6FFA-424B-9E54-709DC4129936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95A3E1C-6FFA-424B-9E54-709DC4129936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9843D277-FA06-4466-ADDA-DF0DEA6794AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9843D277-FA06-4466-ADDA-DF0DEA6794AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9843D277-FA06-4466-ADDA-DF0DEA6794AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9843D277-FA06-4466-ADDA-DF0DEA6794AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{16D0CA4B-C343-44BD-9FF0-93F6F40BE581} = {507540F9-B070-4073-A2E0-3E1FBC798CC4}
+		{D95A3E1C-6FFA-424B-9E54-709DC4129936} = {507540F9-B070-4073-A2E0-3E1FBC798CC4}
+		{9843D277-FA06-4466-ADDA-DF0DEA6794AF} = {507540F9-B070-4073-A2E0-3E1FBC798CC4}
 	EndGlobalSection
 EndGlobal

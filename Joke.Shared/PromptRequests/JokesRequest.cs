@@ -9,7 +9,7 @@ namespace Joke.Shared.PromptRequests;
 
 public static class JokesRequest
 {
-    public static PromptRequest GetRequest(int jokeCount, OpenRouterModelType modelType = OpenRouterModelType.Default)
+    public static PromptRequest GetRequest(int jokeCount)
     {
         var exampleSchema = new JokesResponse
         {
@@ -26,7 +26,7 @@ public static class JokesRequest
         return new PromptRequest
         {
             Id = nameof(JokesRequest),
-            Model = modelType.GetDescription(),
+            Model = OpenRouterModelType.Default.GetDescription(),
             Messages = new List<PromptRequestMessage>
             {
                 new PromptRequestMessage

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Joke.Shared.Types.OpenRouter;
 
 namespace Joke.Shared.Extensions;
 
@@ -48,5 +49,19 @@ public static class StringExtensions
     public static DirectoryInfo? GetBaseDirectory(this string info)
     {
         return Directory.GetParent(info)?.Parent?.Parent?.Parent?.Parent;
+    }
+
+    /// <summary>
+    /// Returns the base directory of the solution
+    /// </summary>
+    public static OpenRouterModelType GetOpenRouterModel(this string? input)
+    {
+        return (input?.ToLower() ?? string.Empty) switch
+        {
+            "google" => OpenRouterModelType.Google,
+            "meta" => OpenRouterModelType.Meta,
+            "qwen" => OpenRouterModelType.Qwen,
+            _ => OpenRouterModelType.OpenAi
+        };
     }
 }
